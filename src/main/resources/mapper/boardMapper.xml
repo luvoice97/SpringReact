@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="board.dao.BoardDAO">
+	<!-- 글쓰기 -->
+<insert id="write" parameterType="java.util.Map">
+    INSERT INTO board (id, name, email, subject, content) 
+    VALUES (#{id}, #{name}, #{email}, #{subject}, #{content})
+</insert>
+
+<update id="refUpdate">
+update board set ref=LAST_INSERT_ID() where seq=LAST_INSERT_ID();
+</update>
+	
+	<!-- 총글수 -->
+	<select id="getTotalA" resultType="int">
+		select count(*) from board
+	</select>
+	
+	<!-- 목록 -->
+<select id="selectList" parameterType="java.util.Map" resultType="board.bean.BoardDTO">
+    SELECT *
+    FROM board
+    WHERE seq BETWEEN #{startNum} AND #{endNum}
+</select>
+
+	<!-- 1개 글 -->
+	<select id="getBoardseq" parameterType="int" resultType="boardDTO">
+		select * from board where seq=#{seq}
+	</select>
+	
+	<!-- 1개 글 -->
+	<select id="getBoard" parameterType="int" resultType="boardDTO">
+		select * from board where seq=#{seq}
+	</select>
+	
+	<!-- 글수정 -->
+	<update id="boardUpdate" parameterType="java.util.Map">
+		update board set subject=#{subject},
+		                 content=#{content},
+		                 logtime=sysdate
+		where seq=#{seq}
+	</update>
+	
+	<!-- 조회수 -->
+	<update id="hitUpdate" parameterType="int">
+		update board set hit=hit+1 where seq=#{seq}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
